@@ -2,30 +2,33 @@ const Gameboard = () => {
   let attacks = Array(10).fill(Array(10).fill(false));
   let ships = [];
   const checkShipHit = (xCoor, yCoor) => {
-    if (ships.length > 0) {
-      if (ships[0].xCoor === xCoor && ships[0].yCoor === yCoor) {
-        return true;
-      } else {
-        return false;
+    for (let j of ships) {
+      for (let i = 0; i < j.ship.length; i++) {
+        if (xCoor === j.xCoor + i * j.xOri && yCoor === j.yCoor + i * j.yOri) {
+          j.ship.hit(i);
+          return true;
+        }
       }
-    } else {
-      return false;
     }
+    return false;
   };
-
   const receiveAttack = (xCoor, yCoor) => {
     attacks[xCoor][yCoor] = true;
     return checkShipHit(xCoor, yCoor);
   };
-  const placeShip = (Ship, xCoor, yCoor, orientation) => {
+  const placeShip = (Ship, xCoor, yCoor, xOri, yOri) => {
     ships.push({
       ship: Ship,
       xCoor: xCoor,
       yCoor: yCoor,
-      orientation: orientation,
+      xOri: xOri,
+      yOri: yOri,
     });
   };
-  return { receiveAttack, placeShip, attacks };
+  const allShipsSunk = () => {
+    return ships.every((i) => i.ship.isSunk());
+  };
+  return { receiveAttack, placeShip, attacks, ships, allShipsSunk };
 };
 
 export default Gameboard;
