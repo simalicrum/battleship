@@ -323,3 +323,43 @@ test("All ships are sunk with a complete gameboard with various attacks on the b
   gameboard.receiveAttack(8, 9);
   expect(gameboard.allShipsSunk()).toBe(true);
 });
+
+test("gameboard with attack functions equals array of correct hits", () => {
+  let gameboard = Gameboard();
+  gameboard.receiveAttack(5, 5);
+  gameboard.receiveAttack(5, 6);
+  gameboard.receiveAttack(5, 7);
+  gameboard.receiveAttack(0, 0);
+  gameboard.receiveAttack(1, 0);
+  gameboard.receiveAttack(2, 0);
+  gameboard.receiveAttack(3, 0);
+  gameboard.receiveAttack(4, 0);
+  gameboard.receiveAttack(8, 2);
+  gameboard.receiveAttack(2, 2);
+  gameboard.receiveAttack(2, 4);
+  gameboard.receiveAttack(8, 4);
+  gameboard.receiveAttack(8, 5);
+  gameboard.receiveAttack(8, 6);
+  gameboard.receiveAttack(4, 9);
+  gameboard.receiveAttack(5, 9);
+  gameboard.receiveAttack(2, 8);
+  gameboard.receiveAttack(9, 2);
+  gameboard.receiveAttack(2, 6);
+  gameboard.receiveAttack(2, 7);
+  gameboard.receiveAttack(8, 7);
+  gameboard.receiveAttack(8, 8);
+  gameboard.receiveAttack(8, 9);
+  let mock = [
+    [true, false, false, false, false, false, false, false, false, false],
+    [true, false, false, false, false, false, false, false, false, false],
+    [true, false, true, false, true, false, true, true, true, false],
+    [true, false, false, false, false, false, false, false, false, false],
+    [true, false, false, false, false, false, false, false, false, true],
+    [false, false, false, false, false, true, true, true, false, true],
+    [false, false, false, false, false, false, false, false, false, false],
+    [false, false, false, false, false, false, false, false, false, false],
+    [false, false, true, false, true, true, true, true, true, true],
+    [false, false, true, false, false, false, false, false, false, false],
+  ];
+  expect(gameboard.attacks).toEqual(mock);
+});

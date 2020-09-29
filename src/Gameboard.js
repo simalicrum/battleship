@@ -1,5 +1,16 @@
 const Gameboard = () => {
-  let attacks = Array(10).fill(Array(10).fill(false));
+  let attacks = [
+    [false, false, false, false, false, false, false, false, false, false],
+    [false, false, false, false, false, false, false, false, false, false],
+    [false, false, false, false, false, false, false, false, false, false],
+    [false, false, false, false, false, false, false, false, false, false],
+    [false, false, false, false, false, false, false, false, false, false],
+    [false, false, false, false, false, false, false, false, false, false],
+    [false, false, false, false, false, false, false, false, false, false],
+    [false, false, false, false, false, false, false, false, false, false],
+    [false, false, false, false, false, false, false, false, false, false],
+    [false, false, false, false, false, false, false, false, false, false],
+  ];
   let ships = [];
   const checkShipHit = (xCoor, yCoor) => {
     for (let j of ships) {
