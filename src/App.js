@@ -24,28 +24,38 @@ class App extends Component {
     this.state.enemy.gameboard.placeShip(Ship(3), 2, 6, 1, 0);
     this.state.enemy.gameboard.placeShip(Ship(4), 8, 6, 0, 1);
     this.state.enemy.gameboard.placeShip(Ship(5), 0, 0, 1, 0);
-    this.state.player.gameboard.receiveAttack(5, 5);
-    this.state.player.gameboard.receiveAttack(5, 6);
-    this.state.player.gameboard.receiveAttack(5, 7);
-    this.state.player.gameboard.receiveAttack(0, 0);
-    this.state.player.gameboard.receiveAttack(1, 0);
-    this.state.player.gameboard.receiveAttack(2, 0);
-    this.state.player.gameboard.receiveAttack(3, 0);
-    this.state.player.gameboard.receiveAttack(8, 2);
-    this.state.player.gameboard.receiveAttack(2, 2);
-    this.state.player.gameboard.receiveAttack(2, 4);
-    this.state.player.gameboard.receiveAttack(8, 4);
-    this.state.player.gameboard.receiveAttack(8, 5);
-    this.state.player.gameboard.receiveAttack(8, 6);
-    this.state.player.gameboard.receiveAttack(4, 9);
-    this.state.player.gameboard.receiveAttack(5, 9);
-    this.state.player.gameboard.receiveAttack(2, 8);
     this.handleClick = this.handleClick.bind(this);
   }
   handleClick(xCoor, yCoor) {
     let newTurn = this.state.enemy;
     newTurn.gameboard.receiveAttack(xCoor, yCoor);
     this.setState({ enemy: newTurn });
+    console.log("You have attacked position " + xCoor + ", " + yCoor);
+    if (this.state.enemy.gameboard.checkShipHit(xCoor, yCoor)) {
+      console.log("It's a hit!");
+    } else {
+      console.log("It's a miss!");
+    }
+    if (this.state.enemy.gameboard.allShipsSunk()) {
+      console.log("You won! Let's play again!");
+    }
+    this.enemyTurn();
+  }
+  enemyTurn() {
+    let newTurn = this.state.player;
+    const xCoor = Math.floor(Math.random() * 10);
+    const yCoor = Math.floor(Math.random() * 10);
+    newTurn.gameboard.receiveAttack(xCoor, yCoor);
+    this.setState({ player: newTurn });
+    console.log("The computer has attacked position " + xCoor + ", " + yCoor);
+    if (this.state.player.gameboard.checkShipHit(xCoor, yCoor)) {
+      console.log("It's a hit!");
+    } else {
+      console.log("It's a miss!");
+    }
+    if (this.state.player.gameboard.allShipsSunk()) {
+      console.log("You lost! Let's play again!");
+    }
   }
   renderPlayerSquare(xCoor, yCoor) {
     return (
@@ -63,17 +73,13 @@ class App extends Component {
     );
   }
   renderEnemySquare(xCoor, yCoor) {
-    let ship = false;
-    if (
-      this.state.enemy.gameboard.shipsOnBoard[xCoor][yCoor] &&
-      this.state.enemy.gameboard.attacks[xCoor][yCoor] === "X"
-    ) {
-      ship = true;
-    }
     return (
       <Square
         value={this.state.enemy.gameboard.attacks[xCoor][yCoor]}
-        isShip={ship}
+        isShip={
+          this.state.enemy.gameboard.shipsOnBoard[xCoor][yCoor] &&
+          this.state.enemy.gameboard.attacks[xCoor][yCoor] === "X"
+        }
         onClick={() => this.handleClick(xCoor, yCoor)}
       />
     );
