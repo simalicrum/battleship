@@ -5,6 +5,8 @@ import Ship from "./Ship";
 import Player from "./Player";
 import Square from "./Square";
 
+const arr = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+
 class App extends Component {
   constructor() {
     super();
@@ -38,84 +40,58 @@ class App extends Component {
     this.state.player.gameboard.receiveAttack(4, 9);
     this.state.player.gameboard.receiveAttack(5, 9);
     this.state.player.gameboard.receiveAttack(2, 8);
-    this.onHit = this.onHit.bind(this);
+    this.handleClick = this.handleClick.bind(this);
   }
-  onHit(xCoor, yCoor) {
-    console.log(xCoor, yCoor);
-    this.state.player.gameboard.receiveAttack(xCoor, yCoor);
-    console.log(this.state.player.gameboard);
+  handleClick(xCoor, yCoor) {
+    let newTurn = this.state.enemy;
+    newTurn.gameboard.receiveAttack(xCoor, yCoor);
+    this.setState({ enemy: newTurn });
   }
-  renderSquare(iindex, jindex) {
+  renderPlayerSquare(xCoor, yCoor) {
     return (
       <Square
-        id={"attacks-".concat(jindex + iindex * 10)}
-        key={"attacks-".concat(jindex + iindex * 10)}
-        xCoor={iindex}
-        yCoor={jindex}
-        attack={this.state.player.gameboard.attacks[iindex][jindex]}
-        ship={this.state.player.gameboard.shipsOnBoard[iindex][jindex]}
-        onHitCallback={this.onHit}
+        value={this.state.player.gameboard.attacks[xCoor][yCoor]}
+        isShip={this.state.player.gameboard.shipsOnBoard[xCoor][yCoor]}
       />
     );
   }
+  renderPlayerRow(yCoor) {
+    return (
+      <div className="row">
+        {arr.map((i) => this.renderPlayerSquare(i, yCoor))}
+      </div>
+    );
+  }
+  renderEnemySquare(xCoor, yCoor) {
+    let ship = false;
+    if (
+      this.state.enemy.gameboard.shipsOnBoard[xCoor][yCoor] &&
+      this.state.enemy.gameboard.attacks[xCoor][yCoor] === "X"
+    ) {
+      ship = true;
+    }
+    return (
+      <Square
+        value={this.state.enemy.gameboard.attacks[xCoor][yCoor]}
+        isShip={ship}
+        onClick={() => this.handleClick(xCoor, yCoor)}
+      />
+    );
+  }
+  renderEnemyRow(yCoor) {
+    return (
+      <div className="row">
+        {arr.map((i) => this.renderEnemySquare(i, yCoor))}
+      </div>
+    );
+  }
   render() {
-    console.log("Drawing the gamesquares");
     return (
       <div className="App">
-        <div className="play-area">
-          <h3>Player:</h3>
-          <div className="row">
-            {this.renderSquare(0, 0)}
-            {this.renderSquare(1, 0)}
-            {this.renderSquare(2, 0)}
-            {this.renderSquare(3, 0)}
-            {this.renderSquare(4, 0)}
-            {this.renderSquare(5, 0)}
-            {this.renderSquare(6, 0)}
-            {this.renderSquare(7, 0)}
-            {this.renderSquare(8, 0)}
-            {this.renderSquare(9, 0)}
-          </div>
-          <div className="row">
-            {this.renderSquare(0, 1)}
-            {this.renderSquare(1, 1)}
-            {this.renderSquare(2, 1)}
-            {this.renderSquare(3, 1)}
-            {this.renderSquare(4, 1)}
-            {this.renderSquare(5, 1)}
-            {this.renderSquare(6, 1)}
-            {this.renderSquare(7, 1)}
-            {this.renderSquare(8, 1)}
-            {this.renderSquare(9, 1)}
-          </div>
-          <div className="row">
-            {this.renderSquare(0, 2)}
-            {this.renderSquare(1, 2)}
-            {this.renderSquare(2, 2)}
-            {this.renderSquare(3, 2)}
-            {this.renderSquare(4, 2)}
-            {this.renderSquare(5, 2)}
-            {this.renderSquare(6, 2)}
-            {this.renderSquare(7, 2)}
-            {this.renderSquare(8, 2)}
-            {this.renderSquare(9, 2)}
-          </div>
-        </div>
-        <div className="play-area">
-          <h3>Enemy:</h3>
-          {this.state.enemy.gameboard.shipsOnBoard.map((i, iindex) => (
-            <div key={iindex} className="row">
-              {i.map((j, jindex) => (
-                <Square
-                  id={"attacks-".concat(jindex + iindex * 10)}
-                  key={"attacks-".concat(jindex + iindex * 10)}
-                  attack={this.state.enemy.gameboard.attacks[iindex][jindex]}
-                  ship={this.state.enemy.gameboard.shipsOnBoard[iindex][jindex]}
-                ></Square>
-              ))}
-            </div>
-          ))}
-        </div>
+        <h3>Your Ships:</h3>
+        <div className="board">{arr.map((i) => this.renderPlayerRow(i))}</div>
+        <h3>Attacks:</h3>
+        <div className="board">{arr.map((i) => this.renderEnemyRow(i))}</div>
       </div>
     );
   }

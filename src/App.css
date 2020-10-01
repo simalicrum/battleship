@@ -13,18 +13,15 @@
 .square {
   height: 40px;
   width: 40px;
-  background: lightblue;
   margin: 2px;
 }
 
-.ship-marker {
-  height: 40px;
-  width: 40px;
+.ship {
+  background: grey;
+}
 
-  background-color: #bbb;
-  border-radius: 50%;
-  display: inline-block;
-  z-index: 0;
+.noship {
+  background: lightblue;
 }
 
 .hit-marker {
