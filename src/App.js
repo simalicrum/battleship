@@ -45,7 +45,19 @@ class App extends Component {
     this.state.player.gameboard.receiveAttack(xCoor, yCoor);
     console.log(this.state.player.gameboard);
   }
-  renderSquare() {}
+  renderSquare(iindex, jindex) {
+    return (
+      <Square
+        id={"attacks-".concat(jindex + iindex * 10)}
+        key={"attacks-".concat(jindex + iindex * 10)}
+        xCoor={iindex}
+        yCoor={jindex}
+        attack={this.state.player.gameboard.attacks[iindex][jindex]}
+        ship={this.state.player.gameboard.shipsOnBoard[iindex][jindex]}
+        onHitCallback={this.onHit}
+      />
+    );
+  }
   render() {
     console.log("Drawing the gamesquares");
     return (
@@ -54,19 +66,7 @@ class App extends Component {
           <h3>Player:</h3>
           {this.state.player.gameboard.shipsOnBoard.map((i, iindex) => (
             <div key={iindex} className="row">
-              {i.map((j, jindex) => (
-                <Square
-                  id={"attacks-".concat(jindex + iindex * 10)}
-                  key={"attacks-".concat(jindex + iindex * 10)}
-                  xCoor={iindex}
-                  yCoor={jindex}
-                  attack={this.state.player.gameboard.attacks[iindex][jindex]}
-                  ship={
-                    this.state.player.gameboard.shipsOnBoard[iindex][jindex]
-                  }
-                  onHitCallback={this.onHit}
-                />
-              ))}
+              {i.map((j, jindex) => this.renderSquare(iindex, jindex))}
             </div>
           ))}
         </div>
