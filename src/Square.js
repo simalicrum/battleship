@@ -16,7 +16,12 @@ class Square extends Component {
     console.log("Redrawing the sqaures");
     console.log(this.props.attack);
     return (
-      <div id={this.props.id} className="square" onClick={this.sendClick}>
+      <div
+        id={this.props.id}
+        key={this.props.id}
+        className="square"
+        onClick={this.sendClick}
+      >
         {this.props.attack}
         {ship}
       </div>

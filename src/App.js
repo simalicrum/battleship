@@ -64,11 +64,42 @@ class App extends Component {
       <div className="App">
         <div className="play-area">
           <h3>Player:</h3>
-          {this.state.player.gameboard.shipsOnBoard.map((i, iindex) => (
-            <div key={iindex} className="row">
-              {i.map((j, jindex) => this.renderSquare(iindex, jindex))}
-            </div>
-          ))}
+          <div className="row">
+            {this.renderSquare(0, 0)}
+            {this.renderSquare(1, 0)}
+            {this.renderSquare(2, 0)}
+            {this.renderSquare(3, 0)}
+            {this.renderSquare(4, 0)}
+            {this.renderSquare(5, 0)}
+            {this.renderSquare(6, 0)}
+            {this.renderSquare(7, 0)}
+            {this.renderSquare(8, 0)}
+            {this.renderSquare(9, 0)}
+          </div>
+          <div className="row">
+            {this.renderSquare(0, 1)}
+            {this.renderSquare(1, 1)}
+            {this.renderSquare(2, 1)}
+            {this.renderSquare(3, 1)}
+            {this.renderSquare(4, 1)}
+            {this.renderSquare(5, 1)}
+            {this.renderSquare(6, 1)}
+            {this.renderSquare(7, 1)}
+            {this.renderSquare(8, 1)}
+            {this.renderSquare(9, 1)}
+          </div>
+          <div className="row">
+            {this.renderSquare(0, 2)}
+            {this.renderSquare(1, 2)}
+            {this.renderSquare(2, 2)}
+            {this.renderSquare(3, 2)}
+            {this.renderSquare(4, 2)}
+            {this.renderSquare(5, 2)}
+            {this.renderSquare(6, 2)}
+            {this.renderSquare(7, 2)}
+            {this.renderSquare(8, 2)}
+            {this.renderSquare(9, 2)}
+          </div>
         </div>
         <div className="play-area">
           <h3>Enemy:</h3>
