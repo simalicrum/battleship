@@ -4,25 +4,25 @@ import Ship from "./Ship";
 test("Attack at 0,0 reports an attack", () => {
   let gameboard = Gameboard();
   gameboard.receiveAttack(0, 0);
-  expect(gameboard.attacks[0][0]).toEqual(true);
+  expect(gameboard.attacks[0][0]).toEqual("X");
 });
 
 test("Attack at 0,9 reports an attack", () => {
   let gameboard = Gameboard();
   gameboard.receiveAttack(0, 9);
-  expect(gameboard.attacks[0][9]).toEqual(true);
+  expect(gameboard.attacks[0][9]).toEqual("X");
 });
 
 test("Attack at 9,0 reports an attack", () => {
   let gameboard = Gameboard();
   gameboard.receiveAttack(9, 0);
-  expect(gameboard.attacks[9][0]).toEqual(true);
+  expect(gameboard.attacks[9][0]).toEqual("X");
 });
 
 test("Attack at 5,5 reports an attack", () => {
   let gameboard = Gameboard();
   gameboard.receiveAttack(5, 5);
-  expect(gameboard.attacks[5][5]).toEqual(true);
+  expect(gameboard.attacks[5][5]).toEqual("X");
 });
 
 test("Attack at 0,0 on a ship of 1 length at that position reports a hit", () => {
@@ -350,16 +350,16 @@ test("gameboard with attack functions equals array of correct hits", () => {
   gameboard.receiveAttack(8, 8);
   gameboard.receiveAttack(8, 9);
   let mock = [
-    [true, false, false, false, false, false, false, false, false, false],
-    [true, false, false, false, false, false, false, false, false, false],
-    [true, false, true, false, true, false, true, true, true, false],
-    [true, false, false, false, false, false, false, false, false, false],
-    [true, false, false, false, false, false, false, false, false, true],
-    [false, false, false, false, false, true, true, true, false, true],
-    [false, false, false, false, false, false, false, false, false, false],
-    [false, false, false, false, false, false, false, false, false, false],
-    [false, false, true, false, true, true, true, true, true, true],
-    [false, false, true, false, false, false, false, false, false, false],
+    ["X", "", "", "", "", "", "", "", "", ""],
+    ["X", "", "", "", "", "", "", "", "", ""],
+    ["X", "", "X", "", "X", "", "X", "X", "X", ""],
+    ["X", "", "", "", "", "", "", "", "", ""],
+    ["X", "", "", "", "", "", "", "", "", "X"],
+    ["", "", "", "", "", "X", "X", "X", "", "X"],
+    ["", "", "", "", "", "", "", "", "", ""],
+    ["", "", "", "", "", "", "", "", "", ""],
+    ["", "", "X", "", "X", "X", "X", "X", "X", "X"],
+    ["", "", "X", "", "", "", "", "", "", ""],
   ];
   expect(gameboard.attacks).toEqual(mock);
 });

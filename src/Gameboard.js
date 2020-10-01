@@ -1,5 +1,17 @@
 const Gameboard = () => {
   let attacks = [
+    ["", "", "", "", "", "", "", "", "", ""],
+    ["", "", "", "", "", "", "", "", "", ""],
+    ["", "", "", "", "", "", "", "", "", ""],
+    ["", "", "", "", "", "", "", "", "", ""],
+    ["", "", "", "", "", "", "", "", "", ""],
+    ["", "", "", "", "", "", "", "", "", ""],
+    ["", "", "", "", "", "", "", "", "", ""],
+    ["", "", "", "", "", "", "", "", "", ""],
+    ["", "", "", "", "", "", "", "", "", ""],
+    ["", "", "", "", "", "", "", "", "", ""],
+  ];
+  let shipsOnBoard = [
     [false, false, false, false, false, false, false, false, false, false],
     [false, false, false, false, false, false, false, false, false, false],
     [false, false, false, false, false, false, false, false, false, false],
@@ -24,7 +36,7 @@ const Gameboard = () => {
     return false;
   };
   const receiveAttack = (xCoor, yCoor) => {
-    attacks[xCoor][yCoor] = true;
+    attacks[xCoor][yCoor] = "X";
     return checkShipHit(xCoor, yCoor);
   };
   const placeShip = (Ship, xCoor, yCoor, xOri, yOri) => {
@@ -35,11 +47,21 @@ const Gameboard = () => {
       xOri: xOri,
       yOri: yOri,
     });
+    for (let i = 0; i < Ship.length; i++) {
+      shipsOnBoard[xCoor + i * xOri][yCoor + i * yOri] = true;
+    }
   };
   const allShipsSunk = () => {
     return ships.every((i) => i.ship.isSunk());
   };
-  return { receiveAttack, placeShip, attacks, ships, allShipsSunk };
+  return {
+    receiveAttack,
+    placeShip,
+    attacks,
+    ships,
+    allShipsSunk,
+    shipsOnBoard,
+  };
 };
 
 export default Gameboard;
