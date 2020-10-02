@@ -1,5 +1,5 @@
 const Gameboard = () => {
-  const newAttacks = [
+  const attacks = [
     ["", "", "", "", "", "", "", "", "", ""],
     ["", "", "", "", "", "", "", "", "", ""],
     ["", "", "", "", "", "", "", "", "", ""],
@@ -11,7 +11,7 @@ const Gameboard = () => {
     ["", "", "", "", "", "", "", "", "", ""],
     ["", "", "", "", "", "", "", "", "", ""],
   ];
-  const newShipsOnBoard = [
+  const shipsOnBoard = [
     [false, false, false, false, false, false, false, false, false, false],
     [false, false, false, false, false, false, false, false, false, false],
     [false, false, false, false, false, false, false, false, false, false],
@@ -23,8 +23,6 @@ const Gameboard = () => {
     [false, false, false, false, false, false, false, false, false, false],
     [false, false, false, false, false, false, false, false, false, false],
   ];
-  let attacks = newAttacks.slice();
-  let shipsOnBoard = newShipsOnBoard.slice();
   let ships = [];
   const checkShipHit = (xCoor, yCoor) => {
     for (let j of ships) {

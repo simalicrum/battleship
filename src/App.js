@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { clone, cloneDeep } from "lodash";
 import "./App.css";
 import Gameboard from "./Gameboard";
 import Ship from "./Ship";
@@ -26,48 +27,38 @@ class App extends Component {
     this.state.enemy.gameboard.placeShip(Ship(5), 0, 0, 1, 0);
     this.handleClick = this.handleClick.bind(this);
   }
+
   handleClick(xCoor, yCoor) {
-    let newTurn = this.state.enemy;
-    newTurn.gameboard.receiveAttack(xCoor, yCoor);
-    this.setState({ enemy: newTurn });
-    console.log("You have attacked position " + xCoor + ", " + yCoor);
-    if (this.state.enemy.gameboard.checkShipHit(xCoor, yCoor)) {
-      console.log("It's a hit!");
-    } else {
-      console.log("It's a miss!");
+    this.forceUpdate();
+    let xCoorEnemy = Math.floor(Math.random() * 10);
+    let yCoorEnemy = Math.floor(Math.random() * 10);
+    while (this.state.player.gameboard.attacks[xCoor][yCoor] === "X") {
+      xCoorEnemy = Math.floor(Math.random() * 10);
+      yCoorEnemy = Math.floor(Math.random() * 10);
     }
-    if (this.state.enemy.gameboard.allShipsSunk()) {
-      console.log("You won! Let's play again!");
-    }
-    this.enemyTurn();
-  }
-  enemyTurn() {
-    let newTurn = this.state.player;
-    const xCoor = Math.floor(Math.random() * 10);
-    const yCoor = Math.floor(Math.random() * 10);
-    newTurn.gameboard.receiveAttack(xCoor, yCoor);
-    this.setState({ player: newTurn });
-    console.log("The computer has attacked position " + xCoor + ", " + yCoor);
-    if (this.state.player.gameboard.checkShipHit(xCoor, yCoor)) {
-      console.log("It's a hit!");
-    } else {
-      console.log("It's a miss!");
-    }
-    if (this.state.player.gameboard.allShipsSunk()) {
-      console.log("You lost! Let's play again!");
-    }
+    this.setState((state) => {
+      let newTurn = cloneDeep(state);
+      newTurn.enemy.gameboard.receiveAttack(xCoor, yCoor);
+      newTurn.player.gameboard.receiveAttack(xCoorEnemy, yCoorEnemy);
+      console.log("newTurn: ", newTurn);
+      return {
+        player: newTurn.player,
+        enemy: newTurn.enemy,
+      };
+    });
   }
   renderPlayerSquare(xCoor, yCoor) {
     return (
       <Square
         value={this.state.player.gameboard.attacks[xCoor][yCoor]}
         isShip={this.state.player.gameboard.shipsOnBoard[xCoor][yCoor]}
+        key={"friend-sqaure-" + (xCoor + yCoor * 10)}
       />
     );
   }
   renderPlayerRow(yCoor) {
     return (
-      <div className="row">
+      <div key={"player-row-" + yCoor} className="row">
         {arr.map((i) => this.renderPlayerSquare(i, yCoor))}
       </div>
     );
@@ -80,13 +71,18 @@ class App extends Component {
           this.state.enemy.gameboard.shipsOnBoard[xCoor][yCoor] &&
           this.state.enemy.gameboard.attacks[xCoor][yCoor] === "X"
         }
-        onClick={() => this.handleClick(xCoor, yCoor)}
+        onClick={
+          this.state.enemy.gameboard.attacks[xCoor][yCoor] === ""
+            ? () => this.handleClick(xCoor, yCoor)
+            : () => {}
+        }
+        key={"enemy-sqaure-" + (xCoor + yCoor * 10)}
       />
     );
   }
   renderEnemyRow(yCoor) {
     return (
-      <div className="row">
+      <div key={"enemy-row-" + yCoor} className="row">
         {arr.map((i) => this.renderEnemySquare(i, yCoor))}
       </div>
     );
