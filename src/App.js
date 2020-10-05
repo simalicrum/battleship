@@ -16,6 +16,7 @@ class App extends Component {
       player: Player(Gameboard()),
       enemy: Player(Gameboard()),
       gamelog: ["Would you like to play a game of Battleship?"],
+      turn: "player",
       initialState: null,
     };
     this.state.player.gameboard.placeShip(Ship(2), 8, 2, 1, 0);
@@ -30,9 +31,24 @@ class App extends Component {
     this.state.enemy.gameboard.placeShip(Ship(5), 0, 0, 1, 0);
     this.handleClick = this.handleClick.bind(this);
     this.state.initialState = cloneDeep(this.state);
-    console.log("this.state: ", this.state);
   }
   handleClick(xCoor, yCoor) {
+    let newTurn = cloneDeep(this.state);
+    newTurn.enemy.gameboard.receiveAttack(xCoor, yCoor);
+    this.setState({ state: newTurn });
+
+    this.setState({
+      gamelog: this.state.gamelog.concat(
+        "You attacked " + xCoor + ", " + yCoor
+      ),
+    });
+
+    this.setState({ turn: "enemy" });
+    this.enemyTurn();
+  }
+
+  enemyTurn() {
+    console.log("enemy turn");
     let xCoorEnemy = Math.floor(Math.random() * 10);
     let yCoorEnemy = Math.floor(Math.random() * 10);
     while (
@@ -42,14 +58,15 @@ class App extends Component {
       yCoorEnemy = Math.floor(Math.random() * 10);
     }
     let newTurn = cloneDeep(this.state);
-    newTurn.enemy.gameboard.receiveAttack(xCoor, yCoor);
-    if (this.state.enemy.gameboard.allShipsSunk()) {
-      console.log("You won the game!");
-      console.log(this.state.initialState);
-      newTurn = cloneDeep(this.state.initialState);
-    }
     newTurn.player.gameboard.receiveAttack(xCoorEnemy, yCoorEnemy);
     this.setState({ state: newTurn });
+    this.setState({ state: this.state }, () => {
+      this.setState({
+        gamelog: this.state.gamelog.concat(
+          "Computer attacked " + xCoorEnemy + ", " + yCoorEnemy
+        ),
+      });
+    });
   }
 
   renderPlayerSquare(xCoor, yCoor) {
@@ -93,7 +110,6 @@ class App extends Component {
     );
   }
   render() {
-    console.log("render");
     return (
       <div className="App">
         <h3>Your Ships:</h3>
