@@ -37,7 +37,7 @@ const Gameboard = () => {
   };
   const receiveAttack = (xCoor, yCoor) => {
     attacks[xCoor][yCoor] = "X";
-    return checkShipHit(xCoor, yCoor);
+    //    return checkShipHit(xCoor, yCoor);
   };
   const placeShip = (Ship, xCoor, yCoor, xOri, yOri) => {
     ships.push({

@@ -16,8 +16,8 @@ class App extends Component {
       player: Player(Gameboard()),
       enemy: Player(Gameboard()),
       gamelog: ["Would you like to play a game of Battleship?"],
-      turn: "player",
       initialState: null,
+      gameOver: false,
     };
     this.state.player.gameboard.placeShip(Ship(2), 8, 2, 1, 0);
     this.state.player.gameboard.placeShip(Ship(3), 5, 5, 0, 1);
@@ -33,22 +33,62 @@ class App extends Component {
     this.state.initialState = cloneDeep(this.state);
   }
   handleClick(xCoor, yCoor) {
-    let newTurn = cloneDeep(this.state);
-    newTurn.enemy.gameboard.receiveAttack(xCoor, yCoor);
-    this.setState({ state: newTurn });
-
-    this.setState({
-      gamelog: this.state.gamelog.concat(
-        "You attacked " + xCoor + ", " + yCoor
-      ),
+    let gameOver = false;
+    this.setState((state) => {
+      let newTurn = cloneDeep(state);
+      newTurn.enemy.gameboard.attacks[xCoor][yCoor] = "X";
+      if (newTurn.enemy.gameboard.allShipsSunk()) {
+        gameOver = true;
+        console.log("Hi");
+      }
+      return {
+        enemy: cloneDeep(newTurn.enemy),
+      };
     });
-
-    this.setState({ turn: "enemy" });
+    this.setState((state) => {
+      return {
+        gamelog: state.gamelog.concat("You attacked " + xCoor + ", " + yCoor),
+      };
+    });
+    if (this.state.enemy.gameboard.checkShipHit(xCoor, yCoor)) {
+      this.setState((state) => {
+        return {
+          gamelog: state.gamelog.concat("It was a hit!"),
+        };
+      });
+    }
+    if (gameOver) {
+      this.setState((state) => {
+        return {
+          gamelog: state.gamelog.concat("You won the game! Let's play again!"),
+        };
+      });
+      this.resetBoard();
+    }
     this.enemyTurn();
   }
 
+  resetBoard() {
+    this.setState((state) => {
+      console.log(
+        "state.enemy.gameboard.allShipsSunk(): ",
+        state.enemy.gameboard.allShipsSunk()
+      );
+      console.log(
+        "state.player.gameboard.allShipsSunk(): ",
+        state.player.gameboard.allShipsSunk()
+      );
+      console.log(state.enemy.gameboard.ships);
+      return {
+        player: cloneDeep(state.initialState.player),
+        enemy: cloneDeep(state.initialState.enemy),
+        gamelog: cloneDeep(state.initialState.gamelog),
+        initialState: cloneDeep(state.initialState),
+      };
+    });
+  }
+
   enemyTurn() {
-    console.log("enemy turn");
     let xCoorEnemy = Math.floor(Math.random() * 10);
     let yCoorEnemy = Math.floor(Math.random() * 10);
     while (
@@ -57,16 +97,28 @@ class App extends Component {
       xCoorEnemy = Math.floor(Math.random() * 10);
       yCoorEnemy = Math.floor(Math.random() * 10);
     }
-    let newTurn = cloneDeep(this.state);
-    newTurn.player.gameboard.receiveAttack(xCoorEnemy, yCoorEnemy);
-    this.setState({ state: newTurn });
-    this.setState({ state: this.state }, () => {
-      this.setState({
-        gamelog: this.state.gamelog.concat(
+
+    this.setState((state) => {
+      let newTurn = cloneDeep(state);
+      newTurn.player.gameboard.attacks[xCoorEnemy][yCoorEnemy] = "X";
+      return {
+        player: cloneDeep(newTurn.player),
+      };
+    });
+    this.setState((state) => {
+      return {
+        gamelog: state.gamelog.concat(
           "Computer attacked " + xCoorEnemy + ", " + yCoorEnemy
         ),
-      });
+      };
     });
+    if (this.state.player.gameboard.checkShipHit(xCoorEnemy, yCoorEnemy)) {
+      this.setState((state) => {
+        return {
+          gamelog: state.gamelog.concat("It was a hit!"),
+        };
+      });
+    }
   }
 
   renderPlayerSquare(xCoor, yCoor) {

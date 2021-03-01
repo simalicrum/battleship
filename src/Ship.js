@@ -6,7 +6,7 @@ const Ship = (length) => {
   const isSunk = () => {
     return hits.every((i) => i === true);
   };
-  return { hit, isSunk, length };
+  return { hit, isSunk, length, hits };
 };
 
 export default Ship;
