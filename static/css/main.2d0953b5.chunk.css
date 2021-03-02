@@ -1,0 +1,2 @@
+.App{display:flex}.play-area{margin:20px}.row{display:flex}.square{height:40px;width:40px;margin:2px}.ship{background:grey}.noship{background:#add8e6}.hit-marker{position:absolute;z-index:1;font-size:40px}#gamelog{height:400px;display:flex;flex-direction:column}
+/*# sourceMappingURL=main.2d0953b5.chunk.css.map */
