@@ -2,7 +2,7 @@
 
 This is a simple battleship game created in [React](https://reactjs.org/). The purpose of this exercise is to implement test driven development using [Jest](https://jestjs.io/) as a testing suite.
 
-In it's current state the game with place the ships in fixed positions for the humna player and computer.
+In it's current state the game with place the ships in fixed positions for the human player and computer.
 
 Live server: [https://simalicrum.github.io/battleship/](https://simalicrum.github.io/battleship/)
 
