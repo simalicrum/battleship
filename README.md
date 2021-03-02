@@ -4,6 +4,6 @@ This is a simple battleship game created in [React](https://reactjs.org/). The p
 
 In it's current state the game with place the ships in fixed positions for the humna player and computer.
 
-Live server: TBD
+Live server: [https://simalicrum.github.io/battleship/](https://simalicrum.github.io/battleship/)
 
 This is a solution to the [Battleship](https://www.theodinproject.com/lessons/battleship) project, a component of [The Odin Project](https://www.theodinproject.com/) full stack web development course.
