@@ -33,58 +33,47 @@ class App extends Component {
     this.state.initialState = cloneDeep(this.state);
   }
   handleClick(xCoor, yCoor) {
-    let gameOver = false;
     this.setState((state) => {
       let newTurn = cloneDeep(state);
       newTurn.enemy.gameboard.attacks[xCoor][yCoor] = "X";
       if (newTurn.enemy.gameboard.allShipsSunk()) {
-        gameOver = true;
-        console.log("Hi");
+        newTurn.gameOver = true;
       }
       return {
         enemy: cloneDeep(newTurn.enemy),
+        gameOver: newTurn.gameOver,
       };
     });
-    this.setState((state) => {
-      return {
-        gamelog: state.gamelog.concat("You attacked " + xCoor + ", " + yCoor),
-      };
-    });
-    if (this.state.enemy.gameboard.checkShipHit(xCoor, yCoor)) {
+    if (!this.gameOver) {
       this.setState((state) => {
         return {
-          gamelog: state.gamelog.concat("It was a hit!"),
+          gamelog: state.gamelog.concat("You attacked " + xCoor + ", " + yCoor),
         };
       });
+      if (this.state.enemy.gameboard.checkShipHit(xCoor, yCoor)) {
+        this.setState((state) => {
+          return {
+            gamelog: state.gamelog.concat("It was a hit!"),
+          };
+        });
+      }
+      this.enemyTurn();
     }
-    if (gameOver) {
-      this.setState((state) => {
-        return {
-          gamelog: state.gamelog.concat("You won the game! Let's play again!"),
-        };
-      });
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.gameOver !== this.state.gameOver) {
       this.resetBoard();
     }
-    this.enemyTurn();
   }
 
   resetBoard() {
-    this.setState((state) => {
-      console.log(
-        "state.enemy.gameboard.allShipsSunk(): ",
-        state.enemy.gameboard.allShipsSunk()
-      );
-      console.log(
-        "state.player.gameboard.allShipsSunk(): ",
-        state.player.gameboard.allShipsSunk()
-      );
-      console.log(state.enemy.gameboard.ships);
-      return {
-        player: cloneDeep(state.initialState.player),
-        enemy: cloneDeep(state.initialState.enemy),
-        gamelog: cloneDeep(state.initialState.gamelog),
-        initialState: cloneDeep(state.initialState),
-      };
+    this.setState({
+      player: cloneDeep(this.state.initialState.player),
+      enemy: cloneDeep(this.state.initialState.enemy),
+      gamelog: cloneDeep(this.state.initialState.gamelog),
+      initialState: cloneDeep(this.state.initialState),
+      gameOver: false,
     });
   }
 
@@ -97,7 +86,6 @@ class App extends Component {
       xCoorEnemy = Math.floor(Math.random() * 10);
       yCoorEnemy = Math.floor(Math.random() * 10);
     }
-
     this.setState((state) => {
       let newTurn = cloneDeep(state);
       newTurn.player.gameboard.attacks[xCoorEnemy][yCoorEnemy] = "X";
@@ -120,7 +108,6 @@ class App extends Component {
       });
     }
   }
-
   renderPlayerSquare(xCoor, yCoor) {
     return (
       <Square
